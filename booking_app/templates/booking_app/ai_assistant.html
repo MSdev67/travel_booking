@@ -1,0 +1,149 @@
+{% extends 'booking_app/base.html' %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-10">
+        <div class="card shadow-sm">
+            <div class="card-header bg-gradient-info text-white py-3">
+                <h4 class="mb-0">
+                    <i class="bi bi-robot me-2"></i>
+                    Travel AI Assistant
+                </h4>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-info d-flex align-items-center">
+                    <i class="bi bi-info-circle me-2 fs-4"></i>
+                    <div>I can help you with bookings, travel information, and answer your questions!</div>
+                </div>
+
+                <!-- Chat Interface -->
+                <div id="chat-container" style="height: 400px; overflow-y: auto; border: 1px solid #ddd; border-radius: 10px; padding: 15px; margin-bottom: 20px; background-color: #f8f9fa;">
+                    <div class="chat-message ai-message">
+                        <div class="message-content bg-white p-3 rounded shadow-sm">
+                            <strong>AI Assistant:</strong> Hello! I'm your travel assistant. How can I help you today? I can assist with bookings, travel information, cancellations, and more!
+                        </div>
+                        <small class="text-muted">Just now</small>
+                    </div>
+                </div>
+
+                <!-- Chat Input -->
+                <div class="input-group">
+                    <input type="text" id="user-input" class="form-control" placeholder="Ask me anything about travel booking..." aria-label="Message to AI assistant">
+                    <button class="btn btn-primary" type="button" id="send-button">
+                        <i class="bi bi-send me-1"></i> Send
+                    </button>
+                </div>
+
+                <!-- Quick Questions -->
+                <div class="mt-4">
+                    <h6 class="text-primary mb-3">Quick Questions:</h6>
+                    <div class="d-flex flex-wrap gap-2">
+                        <button class="btn btn-outline-primary quick-question" data-question="How do I book a flight?">
+                            How to book flights?
+                        </button>
+                        <button class="btn btn-outline-primary quick-question" data-question="What is the cancellation policy?">
+                            Cancellation policy?
+                        </button>
+                        <button class="btn btn-outline-primary quick-question" data-question="How to check availability?">
+                            Check availability
+                        </button>
+                        <button class="btn btn-outline-primary quick-question" data-question="What are the cheapest options?">
+                            Cheapest options
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- JavaScript for AI Chat -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const chatContainer = document.getElementById('chat-container');
+        const userInput = document.getElementById('user-input');
+        const sendButton = document.getElementById('send-button');
+        
+        // Function to add message to chat
+        function addMessage(message, isUser = false) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `chat-message ${isUser ? 'user-message' : 'ai-message'} mb-3`;
+            
+            const timestamp = new Date().toLocaleTimeString();
+            
+            messageDiv.innerHTML = `
+                <div class="message-content ${isUser ? 'bg-primary text-white' : 'bg-white'} p-3 rounded shadow-sm">
+                    <strong>${isUser ? 'You' : 'AI Assistant'}:</strong> ${message}
+                </div>
+                <small class="text-muted">${timestamp}</small>
+            `;
+            
+            chatContainer.appendChild(messageDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+        
+        // Function to send message to AI
+        function sendMessage() {
+            const message = userInput.value.trim();
+            if (message) {
+                addMessage(message, true);
+                userInput.value = '';
+                
+                // Send to server
+                fetch('/ai-response/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    },
+                    body: JSON.stringify({ message: message })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.response) {
+                        addMessage(data.response);
+                    } else if (data.error) {
+                        addMessage('Sorry, I encountered an error. Please try again.');
+                    }
+                })
+                .catch(error => {
+                    addMessage('Sorry, I\'m having trouble connecting. Please try again.');
+                });
+            }
+        }
+        
+        // Event listeners
+        sendButton.addEventListener('click', sendMessage);
+        userInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+        
+        // Quick questions
+        document.querySelectorAll('.quick-question').forEach(button => {
+            button.addEventListener('click', function() {
+                userInput.value = this.getAttribute('data-question');
+                sendMessage();
+            });
+        });
+    });
+</script>
+
+<style>
+    .chat-message {
+        display: flex;
+        flex-direction: column;
+    }
+    .user-message {
+        align-items: flex-end;
+    }
+    .ai-message {
+        align-items: flex-start;
+    }
+    .message-content {
+        max-width: 80%;
+        word-wrap: break-word;
+    }
+</style>
+{% endblock %}

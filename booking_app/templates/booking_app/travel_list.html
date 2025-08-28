@@ -1,0 +1,121 @@
+{% extends 'booking_app/base.html' %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="text-dark mb-0">
+                <i class="bi bi-geo-alt me-2"></i>
+                Available Travel Options
+            </h2>
+            <a href="{% url 'ai_assistant' %}" class="btn btn-info">
+                <i class="bi bi-robot me-1"></i> AI Assistant
+            </a>
+        </div>
+        
+        <!-- Search Form -->
+        <div class="card mb-4 shadow-sm">
+            <div class="card-body p-4">
+                <h5 class="card-title text-primary mb-3">Search & Filter</h5>
+                <form method="get" action="{% url 'travel_list' %}">
+                    <div class="row g-3">
+                        <div class="col-md-3">
+                            <label for="id_travel_type" class="form-label fw-bold">Travel Type</label>
+                            {{ form.travel_type }}
+                        </div>
+                        <div class="col-md-3">
+                            <label for="id_source" class="form-label fw-bold">From</label>
+                            {{ form.source }}
+                        </div>
+                        <div class="col-md-3">
+                            <label for="id_destination" class="form-label fw-bold">To</label>
+                            {{ form.destination }}
+                        </div>
+                        <div class="col-md-3">
+                            <label for="id_date" class="form-label fw-bold">Date</label>
+                            {{ form.date }}
+                        </div>
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-search me-1"></i> Search
+                            </button>
+                            <a href="{% url 'travel_list' %}" class="btn btn-outline-secondary ms-2">
+                                <i class="bi bi-arrow-clockwise me-1"></i> Clear
+                            </a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Travel Options -->
+        {% if travel_options %}
+        <div class="row">
+            {% for travel in travel_options %}
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card travel-card h-100">
+                    <div class="card-header bg-transparent text-center py-3">
+                        <h5 class="card-title mb-0">
+                            <i class="bi 
+                                {% if travel.travel_type == 'Flight' %}bi-airplane text-primary
+                                {% elif travel.travel_type == 'Train' %}bi-train-lightrail-front text-success
+                                {% else %}bi-bus-front text-warning{% endif %} me-2"></i>
+                            {{ travel.travel_type }}
+                        </h5>
+                        <small class="text-muted">{{ travel.source }} to {{ travel.destination }}</small>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="fw-bold">Departure:</span>
+                            <span>{{ travel.departure_time|date:"M d, Y H:i" }}</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="fw-bold">Arrival:</span>
+                            <span>{{ travel.arrival_time|date:"M d, Y H:i" }}</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="fw-bold">Available Seats:</span>
+                            <span class="badge bg-{% if travel.available_seats > 10 %}success{% elif travel.available_seats > 0 %}warning{% else %}danger{% endif %}">
+                                {{ travel.available_seats }}
+                            </span>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center mt-3">
+                            <span class="fw-bold">Price:</span>
+                            <span class="text-rupee fs-5">₹{{ travel.price }}</span>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-transparent text-center">
+                        {% if user.is_authenticated %}
+                            {% if travel.available_seats > 0 %}
+                            <a href="{% url 'booking_create' travel.travel_id %}" class="btn btn-primary btn-sm">
+                                <i class="bi bi-ticket-perforated me-1"></i> Book Now
+                            </a>
+                            {% else %}
+                            <button class="btn btn-secondary btn-sm" disabled>
+                                <i class="bi bi-x-circle me-1"></i> Sold Out
+                            </button>
+                            {% endif %}
+                        {% else %}
+                        <a href="{% url 'login' %}" class="btn btn-outline-primary btn-sm">
+                            <i class="bi bi-box-arrow-in-right me-1"></i> Login to Book
+                        </a>
+                        {% endif %}
+                        <small class="text-muted d-block mt-2">ID: {{ travel.travel_id }}</small>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        
+        <!-- No results message -->
+        {% else %}
+        <div class="alert alert-info text-center py-4">
+            <h4 class="alert-heading">
+                <i class="bi bi-info-circle me-2"></i>No travel options found!
+            </h4>
+            <p class="mb-0">Try adjusting your search criteria or <a href="{% url 'ai_assistant' %}" class="alert-link">ask our AI assistant</a> for help finding travel options.</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

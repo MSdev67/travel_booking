@@ -1,0 +1,101 @@
+{% extends 'booking_app/base.html' %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow-sm">
+            <div class="card-header bg-gradient-primary text-white py-3">
+                <h4 class="mb-0">
+                    <i class="bi bi-ticket-perforated me-2"></i>
+                    Book Travel: {{ travel_option.travel_type }} from {{ travel_option.source }} to {{ travel_option.destination }}
+                </h4>
+            </div>
+            <div class="card-body">
+                <!-- Travel Summary -->
+                <div class="card mb-4 border-0 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="text-primary">
+                            <i class="bi bi-info-circle me-2"></i>Travel Details
+                        </h5>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p><strong>Departure:</strong> {{ travel_option.departure_time|date:"M d, Y H:i" }}</p>
+                                <p><strong>Arrival:</strong> {{ travel_option.arrival_time|date:"M d, Y H:i" }}</p>
+                            </div>
+                            <div class="col-md-6">
+                                <p><strong>Available Seats:</strong> {{ travel_option.available_seats }}</p>
+                                <p><strong>Price per Seat:</strong> <span class="text-rupee">₹{{ travel_option.price }}</span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Booking Form -->
+                <form method="post">
+                    {% csrf_token %}
+                    
+                    <div class="mb-3">
+                        <label for="id_number_of_seats" class="form-label fw-bold">Number of Seats</label>
+                        {{ form.number_of_seats }}
+                        {% if form.number_of_seats.errors %}
+                            <div class="text-danger">
+                                {% for error in form.number_of_seats.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                        <div class="form-text">Maximum {{ travel_option.available_seats }} seats available</div>
+                    </div>
+
+                    <!-- Price Calculation -->
+                    <div class="card mb-4 border-0 shadow-sm">
+                        <div class="card-body">
+                            <h5 class="text-primary">
+                                <i class="bi bi-calculator me-2"></i>Price Calculation
+                            </h5>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <p>Price per seat: <span class="text-rupee">₹{{ travel_option.price }}</span></p>
+                                    <p>Number of seats: <span id="seat-count">1</span></p>
+                                </div>
+                                <div class="col-md-6 text-end">
+                                    <h4>Total: <span class="text-rupee" id="total-price">₹{{ travel_option.price }}</span></h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-between">
+                        <a href="{% url 'travel_list' %}" class="btn btn-secondary">
+                            <i class="bi bi-arrow-left me-1"></i> Back to Travel Options
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-check-circle me-1"></i> Confirm Booking
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- JavaScript for real-time price calculation -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const seatInput = document.getElementById('id_number_of_seats');
+        const seatCount = document.getElementById('seat-count');
+        const totalPrice = document.getElementById('total-price');
+        const pricePerSeat = {{ travel_option.price }};
+        
+        seatInput.addEventListener('input', function() {
+            const seats = parseInt(this.value) || 0;
+            seatCount.textContent = seats;
+            totalPrice.textContent = '₹' + (seats * pricePerSeat).toFixed(2);
+        });
+        
+        // Initialize values
+        seatCount.textContent = seatInput.value || 1;
+        totalPrice.textContent = '₹' + ((seatInput.value || 1) * pricePerSeat).toFixed(2);
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,177 @@
+{% extends 'booking_app/base.html' %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-10">
+        <div class="card shadow-sm">
+            <div class="card-header bg-gradient-primary text-white py-3">
+                <h4 class="mb-0">
+                    <i class="bi bi-ticket-detailed me-2"></i>
+                    Booking Details #{{ booking.booking_id }}
+                </h4>
+            </div>
+            <div class="card-body">
+                <!-- Booking Status Badge -->
+                <div class="mb-4 d-flex justify-content-between align-items-center">
+                    <span class="badge bg-{% if booking.status == 'Confirmed' %}success{% else %}danger{% endif %} p-2 fs-6">
+                        <i class="bi {% if booking.status == 'Confirmed' %}bi-check-circle{% else %}bi-x-circle{% endif %} me-1"></i>
+                        {{ booking.status }}
+                    </span>
+                    <span class="text-muted">Booked on {{ booking.booking_date|date:"M d, Y H:i" }}</span>
+                </div>
+
+                <div class="row">
+                    <!-- Travel Information -->
+                    <div class="col-md-6">
+                        <div class="card mb-4 border-0 shadow-sm">
+                            <div class="card-header bg-light">
+                                <h5 class="mb-0 text-primary">
+                                    <i class="bi bi-geo-alt me-2"></i>Travel Information
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="mb-3 d-flex justify-content-between">
+                                    <strong>Travel Type:</strong>
+                                    <span>
+                                        <i class="bi 
+                                            {% if booking.travel_option.travel_type == 'Flight' %}bi-airplane text-primary
+                                            {% elif booking.travel_option.travel_type == 'Train' %}bi-train-lightrail-front text-success
+                                            {% else %}bi-bus-front text-warning{% endif %} me-1"></i>
+                                        {{ booking.travel_option.travel_type }}
+                                    </span>
+                                </div>
+                                
+                                <div class="mb-3 d-flex justify-content-between">
+                                    <strong>Route:</strong>
+                                    <span>
+                                        {{ booking.travel_option.source }} → {{ booking.travel_option.destination }}
+                                    </span>
+                                </div>
+                                
+                                <div class="mb-3 d-flex justify-content-between">
+                                    <strong>Departure:</strong>
+                                    <span>
+                                        {{ booking.travel_option.departure_time|date:"M d, Y H:i" }}
+                                    </span>
+                                </div>
+                                
+                                <div class="mb-3 d-flex justify-content-between">
+                                    <strong>Arrival:</strong>
+                                    <span>
+                                        {{ booking.travel_option.arrival_time|date:"M d, Y H:i" }}
+                                    </span>
+                                </div>
+                                
+                                <div class="mb-3 d-flex justify-content-between">
+                                    <strong>Duration:</strong>
+                                    <span>
+                                        {{ duration_hours }}h {{ duration_minutes }}m
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Booking Details -->
+                    <div class="col-md-6">
+                        <div class="card mb-4 border-0 shadow-sm">
+                            <div class="card-header bg-light">
+                                <h5 class="mb-0 text-primary">
+                                    <i class="bi bi-receipt me-2"></i>Booking Details
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="mb-3 d-flex justify-content-between">
+                                    <strong>Booking ID:</strong>
+                                    <span>#{{ booking.booking_id }}</span>
+                                </div>
+                                
+                                <div class="mb-3 d-flex justify-content-between">
+                                    <strong>Passenger:</strong>
+                                    <span>{{ booking.user.get_full_name|default:booking.user.username }}</span>
+                                </div>
+                                
+                                <div class="mb-3 d-flex justify-content-between">
+                                    <strong>Number of Seats:</strong>
+                                    <span>{{ booking.number_of_seats }}</span>
+                                </div>
+                                
+                                <div class="mb-3 d-flex justify-content-between">
+                                    <strong>Price per Seat:</strong>
+                                    <span class="text-rupee">₹{{ booking.travel_option.price }}</span>
+                                </div>
+                                
+                                <div class="mb-3 d-flex justify-content-between align-items-center">
+                                    <strong>Total Amount:</strong>
+                                    <span class="text-rupee fw-bold fs-5">₹{{ booking.total_price }}</span>
+                                </div>
+                                
+                                <div class="mb-3 d-flex justify-content-between">
+                                    <strong>Booking Date:</strong>
+                                    <span>{{ booking.booking_date|date:"M d, Y H:i" }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="row mt-4">
+                    <div class="col-12">
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-between">
+                            <a href="{% url 'booking_list' %}" class="btn btn-secondary">
+                                <i class="bi bi-arrow-left me-1"></i> Back to Bookings
+                            </a>
+                            
+                            {% if booking.status == 'Confirmed' %}
+                            <form method="post" action="{% url 'booking_cancel' booking.booking_id %}">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger" 
+                                        onclick="return confirm('Are you sure you want to cancel this booking?')">
+                                    <i class="bi bi-x-circle me-1"></i> Cancel Booking
+                                </button>
+                            </form>
+                            {% endif %}
+                            
+                            <button class="btn btn-outline-primary" onclick="window.print()">
+                                <i class="bi bi-printer me-1"></i> Print Ticket
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Additional Information -->
+                <div class="row mt-4">
+                    <div class="col-12">
+                        <div class="alert alert-info">
+                            <h6><i class="bi bi-info-circle me-2"></i> Important Information</h6>
+                            <ul class="mb-0">
+                                <li>Please arrive at least 2 hours before departure for international flights</li>
+                                <li>Carry a valid ID proof for verification</li>
+                                <li>Check-in closes 45 minutes before departure</li>
+                                {% if booking.travel_option.travel_type == 'Flight' %}
+                                <li>Baggage allowance: 20kg check-in + 7kg cabin</li>
+                                {% endif %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Print Styles -->
+<style media="print">
+    .navbar, .btn, footer {
+        display: none !important;
+    }
+    .card {
+        border: 1px solid #000 !important;
+    }
+    .bg-gradient-primary {
+        background-color: #3B71CA !important;
+        color: white !important;
+    }
+</style>
+{% endblock %}

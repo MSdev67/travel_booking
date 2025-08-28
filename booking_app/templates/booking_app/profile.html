@@ -1,0 +1,123 @@
+{% extends 'booking_app/base.html' %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-10">
+        <div class="card shadow-sm">
+            <div class="card-header bg-gradient-primary text-white py-3">
+                <h4 class="mb-0">
+                    <i class="bi bi-person-circle me-2"></i>
+                    User Profile
+                </h4>
+            </div>
+            <div class="card-body">
+                <!-- User Stats -->
+                <div class="row mb-4">
+                    <div class="col-md-4 mb-3">
+                        <div class="card text-center bg-light border-0 shadow-sm h-100">
+                            <div class="card-body py-4">
+                                <h5 class="card-title display-6 text-primary">{{ total_bookings }}</h5>
+                                <p class="card-text fw-bold">Total Bookings</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <div class="card text-center bg-gradient-success text-white border-0 shadow-sm h-100">
+                            <div class="card-body py-4">
+                                <h5 class="card-title display-6">{{ confirmed_bookings }}</h5>
+                                <p class="card-text fw-bold">Confirmed</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <div class="card text-center bg-gradient-danger text-white border-0 shadow-sm h-100">
+                            <div class="card-body py-4">
+                                <h5 class="card-title display-6">{{ cancelled_bookings }}</h5>
+                                <p class="card-text fw-bold">Cancelled</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Profile Form -->
+                <form method="post">
+                    {% csrf_token %}
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="id_username" class="form-label fw-bold">Username</label>
+                            {{ form.username }}
+                            {% if form.username.errors %}
+                                <div class="text-danger">
+                                    {% for error in form.username.errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label for="id_email" class="form-label fw-bold">Email</label>
+                            {{ form.email }}
+                            {% if form.email.errors %}
+                                <div class="text-danger">
+                                    {% for error in form.email.errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Account Status</label>
+                        <div class="form-control">
+                            {% if user.is_active %}
+                                <span class="badge bg-success p-2">
+                                    <i class="bi bi-check-circle me-1"></i>Active
+                                </span>
+                            {% else %}
+                                <span class="badge bg-danger p-2">
+                                    <i class="bi bi-x-circle me-1"></i>Inactive
+                                </span>
+                            {% endif %}
+                            <span class="ms-2">Member since: {{ user.date_joined|date:"M d, Y" }}</span>
+                        </div>
+                    </div>
+
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+                        <a href="{% url 'booking_list' %}" class="btn btn-outline-primary me-md-2">
+                            <i class="bi bi-ticket me-1"></i> View My Bookings
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-check-circle me-1"></i> Update Profile
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="card mt-4 shadow-sm">
+            <div class="card-header bg-light">
+                <h5 class="mb-0 text-primary">
+                    <i class="bi bi-lightning me-2"></i>Quick Actions
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2 d-md-flex">
+                    <a href="{% url 'travel_list' %}" class="btn btn-outline-primary me-md-2">
+                        <i class="bi bi-search me-1"></i> Browse Travel Options
+                    </a>
+                    <a href="{% url 'ai_assistant' %}" class="btn btn-outline-info me-md-2">
+                        <i class="bi bi-robot me-1"></i> AI Travel Assistant
+                    </a>
+                    <a href="{% url 'home' %}" class="btn btn-outline-secondary">
+                        <i class="bi bi-house me-1"></i> Back to Home
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

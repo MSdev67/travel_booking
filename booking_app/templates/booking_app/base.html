@@ -1,0 +1,1477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TravelBooking - Explore India</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #3B71CA;
+            --secondary-color: #FF7E33;
+            --accent-color: #14A44D;
+            --light-color: #F8F9FA;
+            --dark-color: #332D2D;
+            --background-gradient: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        }
+        
+        * {
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        body {
+            background: var(--background-gradient);
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+        }
+        
+        .navbar-brand {
+            font-weight: 700;
+            color: var(--primary-color) !important;
+            font-size: 1.5rem;
+        }
+        
+        .nav-link {
+            font-weight: 500;
+        }
+        
+        .card {
+            border-radius: 15px;
+            overflow: hidden;
+            border: none;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+        }
+        
+        .card-header {
+            border-radius: 15px 15px 0 0 !important;
+            border: none;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            font-weight: 500;
+            padding: 10px 20px;
+            border-radius: 8px;
+        }
+        
+        .btn-primary:hover {
+            background-color: #2c5aa8;
+            border-color: #2c5aa8;
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background-color: var(--secondary-color);
+            border-color: var(--secondary-color);
+            font-weight: 500;
+            padding: 10px 20px;
+            border-radius: 8px;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #e66a1f;
+            border-color: #e66a1f;
+        }
+        
+        .bg-primary {
+            background: linear-gradient(45deg, var(--primary-color), #5a8cff) !important;
+        }
+        
+        .bg-info {
+            background: linear-gradient(45deg, #17a2b8, #5ad9f9) !important;
+        }
+        
+        .text-rupee {
+            color: #FF9933;
+            font-weight: bold;
+        }
+        
+        .travel-icon {
+            font-size: 1.8rem;
+            margin-right: 10px;
+        }
+        
+        .search-section {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+        
+        .form-control, .form-select {
+            border-radius: 8px;
+            padding: 12px 15px;
+            border: 2px solid #e2e8f0;
+            transition: all 0.3s;
+        }
+        
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.25rem rgba(59, 113, 202, 0.25);
+        }
+        
+        .travel-option-card {
+            height: 100%;
+        }
+        
+        .travel-type-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 0.8rem;
+            padding: 5px 10px;
+            border-radius: 20px;
+        }
+        
+        footer {
+            background: var(--dark-color);
+            color: white;
+            margin-top: 50px;
+            padding: 25px 0;
+        }
+        
+        .jumbotron {
+            background: linear-gradient(135deg, rgba(59,113,202,0.1) 0%, rgba(255,126,51,0.1) 100%);
+            border-radius: 20px;
+            padding: 3rem 2rem;
+        }
+        
+        .price-tag {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+        
+        .city-highlight {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+        
+        .availability-badge {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+        }
+        
+        .chat-container {
+            height: 400px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            background-color: #f8f9fa;
+        }
+        
+        .chat-message {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 15px;
+        }
+        
+        .user-message {
+            align-items: flex-end;
+        }
+        
+        .ai-message {
+            align-items: flex-start;
+        }
+        
+        .message-content {
+            max-width: 80%;
+            word-wrap: break-word;
+            padding: 12px;
+            border-radius: 10px;
+        }
+        
+        .booking-detail-card {
+            margin-bottom: 20px;
+        }
+        
+        .profile-stats .card {
+            text-align: center;
+            padding: 20px 0;
+        }
+        
+        @media (max-width: 768px) {
+            .travel-option-card {
+                margin-bottom: 20px;
+            }
+        }
+        
+        /* Page container for multi-page simulation */
+        .page-container {
+            display: none;
+        }
+        
+        .page-container.active {
+            display: block;
+        }
+        
+        /* Navigation highlight */
+        .nav-item.active .nav-link {
+            color: var(--primary-color) !important;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="#" onclick="showPage('home')">
+                <i class="bi bi-geo-alt-fill"></i> TravelBooking
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item active" id="nav-home">
+                        <a class="nav-link" href="#" onclick="showPage('home')">Home</a>
+                    </li>
+                    <li class="nav-item" id="nav-travel">
+                        <a class="nav-link" href="#" onclick="showPage('travel-list')">Travel Options</a>
+                    </li>
+                    <li class="nav-item" id="nav-bookings">
+                        <a class="nav-link" href="#" onclick="showPage('booking-list')">My Bookings</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item" id="nav-ai">
+                        <a class="nav-link" href="#" onclick="showPage('ai-assistant')">
+                            <i class="bi bi-robot"></i> AI Assistant
+                        </a>
+                    </li>
+                    <li class="nav-item" id="nav-profile">
+                        <a class="nav-link" href="#" onclick="showPage('profile')">Profile</a>
+                    </li>
+                    <li class="nav-item" id="nav-login">
+                        <a class="nav-link" href="#" onclick="showPage('login')">Login</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <!-- HOME PAGE -->
+        <div id="home" class="page-container active">
+            <div class="row">
+                <div class="col-12">
+                    <div class="jumbotron text-center mb-5">
+                        <h1 class="display-4 text-primary">Discover Incredible India</h1>
+                        <p class="lead">Book flights, trains, and buses across beautiful Indian destinations</p>
+                        <hr class="my-4">
+                        <p>Experience the diversity of India with our seamless booking platform</p>
+                        <a class="btn btn-primary btn-lg px-4 py-2 mt-2" href="#" onclick="showPage('travel-list')">
+                            <i class="bi bi-search me-2"></i>Explore Travel Options
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-5">
+                <div class="col-12">
+                    <div class="search-section">
+                        <h2 class="mb-4 text-center text-dark">Search Travel Options</h2>
+                        <form>
+                            <div class="row g-3">
+                                <div class="col-md-3">
+                                    <label for="travelType" class="form-label fw-bold">Travel Type</label>
+                                    <select class="form-select" id="travelType">
+                                        <option selected value="all">All</option>
+                                        <option value="flight">Flight</option>
+                                        <option value="train">Train</option>
+                                        <option value="bus">Bus</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="sourceCity" class="form-label fw-bold">From</label>
+                                    <select class="form-select" id="sourceCity">
+                                        <option selected>Select City</option>
+                                        <option>Mumbai</option>
+                                        <option>Delhi</option>
+                                        <option>Bangalore</option>
+                                        <option>Chennai</option>
+                                        <option>Kolkata</option>
+                                        <option>Hyderabad</option>
+                                        <option>Ahmedabad</option>
+                                        <option>Pune</option>
+                                        <option>Jaipur</option>
+                                        <option>Lucknow</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="destinationCity" class="form-label fw-bold">To</label>
+                                    <select class="form-select" id="destinationCity">
+                                        <option selected>Select City</option>
+                                        <option>Mumbai</option>
+                                        <option>Delhi</option>
+                                        <option>Bangalore</option>
+                                        <option>Chennai</option>
+                                        <option>Kolkata</option>
+                                        <option>Hyderabad</option>
+                                        <option>Ahmedabad</option>
+                                        <option>Pune</option>
+                                        <option>Jaipur</option>
+                                        <option>Lucknow</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="travelDate" class="form-label fw-bold">Date</label>
+                                    <input type="date" class="form-control" id="travelDate">
+                                </div>
+                                <div class="col-12 text-center mt-3">
+                                    <button type="button" class="btn btn-primary px-4" onclick="showPage('travel-list')">
+                                        <i class="bi bi-search me-2"></i>Search
+                                    </button>
+                                    <button type="reset" class="btn btn-outline-secondary px-4 ms-2">
+                                        <i class="bi bi-arrow-clockwise me-2"></i>Clear
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-12">
+                    <h2 class="mb-4 text-center text-dark">Popular Travel Options</h2>
+                    
+                    <div class="row">
+                        <!-- Flight Option -->
+                        <div class="col-md-4 mb-4">
+                            <div class="card travel-option-card">
+                                <div class="card-header bg-primary text-white py-3 position-relative">
+                                    <h5 class="mb-0">
+                                        <i class="bi bi-airplane travel-icon"></i>Flight
+                                    </h5>
+                                    <span class="travel-type-badge bg-light text-dark">Flight No: AI-202</span>
+                                </div>
+                                <div class="card-body">
+                                    <h6 class="card-title text-center mb-4">
+                                        <span class="city-highlight">Mumbai</span> to <span class="city-highlight">Delhi</span>
+                                    </h6>
+                                    <div class="d-flex justify-content-between mb-2">
+                                        <span class="fw-bold">Departure:</span>
+                                        <span>Aug 29, 2025 08:30</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between mb-2">
+                                        <span class="fw-bold">Arrival:</span>
+                                        <span>Aug 29, 2025 10:45</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between mb-2">
+                                        <span class="fw-bold">Duration:</span>
+                                        <span>2h 15m</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between mb-2">
+                                        <span class="fw-bold">Available Seats:</span>
+                                        <span class="availability-badge bg-success text-white">24 Seats</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-center mt-4">
+                                        <span class="fw-bold">Price:</span>
+                                        <span class="price-tag text-rupee">₹5,499</span>
+                                    </div>
+                                </div>
+                                <div class="card-footer bg-transparent text-center">
+                                    <button class="btn btn-primary" onclick="showPage('booking-form')">
+                                        <i class="bi bi-ticket-perforated me-1"></i> Book Now
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Train Option -->
+                        <div class="col-md-4 mb-4">
+                            <div class="card travel-option-card">
+                                <div class="card-header bg-success text-white py-3 position-relative">
+                                    <h5 class="mb-0">
+                                        <i class="bi bi-train-lightrail-front travel-icon"></i>Train
+                                    </h5>
+                                    <span class="travel-type-badge bg-light text-dark">Train No: 12302</span>
+                                </div>
+                                <div class="card-body">
+                                    <h6 class="card-title text-center mb-4">
+                                        <span class="city-highlight">Bangalore</span> to <span class="city-highlight">Chennai</span>
+                                    </h6>
+                                    <div class="d-flex justify-content-between mb-2">
+                                        <span class="fw-bold">Departure:</span>
+                                        <span>Aug 30, 2025 15:20</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between mb-2">
+                                        <span class="fw-bold">Arrival:</span>
+                                        <span>Aug 30, 2025 22:45</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between mb-2">
+                                        <span class="fw-bold">Duration:</span>
+                                        <span>7h 25m</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between mb-2">
+                                        <span class="fw-bold">Available Seats:</span>
+                                        <span class="availability-badge bg-warning text-dark">12 Seats</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-center mt-4">
+                                        <span class="fw-bold">Price:</span>
+                                        <span class="price-tag text-rupee">₹1,249</span>
+                                    </div>
+                                </div>
+                                <div class="card-footer bg-transparent text-center">
+                                    <button class="btn btn-primary" onclick="showPage('booking-form')">
+                                        <i class="bi bi-ticket-perforated me-1"></i> Book Now
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Bus Option -->
+                        <div class="col-md-4 mb-4">
+                            <div class="card travel-option-card">
+                                <div class="card-header bg-warning text-dark py-3 position-relative">
+                                    <h5 class="mb-0">
+                                        <i class="bi bi-bus-front travel-icon"></i>Bus
+                                    </h5>
+                                    <span class="travel-type-badge bg-light text-dark">Bus Type: AC Sleeper</span>
+                                </div>
+                                <div class="card-body">
+                                    <h6 class="card-title text-center mb-4">
+                                        <span class="city-highlight">Hyderabad</span> to <span class="city-highlight">Pune</span>
+                                    </h6>
+                                    <div class="d-flex justify-content-between mb-2">
+                                        <span class="fw-bold">Departure:</span>
+                                        <span>Aug 31, 2025 20:00</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between mb-2">
+                                        <span class="fw-bold">Arrival:</span>
+                                        <span>Sep 01, 2025 07:30</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between mb-2">
+                                        <span class="fw-bold">Duration:</span>
+                                        <span>11h 30m</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between mb-2">
+                                        <span class="fw-bold">Available Seats:</span>
+                                        <span class="availability-badge bg-success text-white">18 Seats</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-center mt-4">
+                                        <span class="fw-bold">Price:</span>
+                                        <span class="price-tag text-rupee">₹1,899</span>
+                                    </div>
+                                </div>
+                                <div class="card-footer bg-transparent text-center">
+                                    <button class="btn btn-primary" onclick="showPage('booking-form')">
+                                        <i class="bi bi-ticket-perforated me-1"></i> Book Now
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center mt-4">
+                        <a href="#" class="btn btn-outline-primary" onclick="showPage('travel-list')">View All Travel Options</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TRAVEL LIST PAGE -->
+        <div id="travel-list" class="page-container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h2 class="text-dark mb-0">
+                            <i class="bi bi-geo-alt me-2"></i>
+                            Available Travel Options
+                        </h2>
+                        <a href="#" class="btn btn-info" onclick="showPage('ai-assistant')">
+                            <i class="bi bi-robot me-1"></i> AI Assistant
+                        </a>
+                    </div>
+                    
+                    <!-- Search Form -->
+                    <div class="card mb-4 shadow-sm">
+                        <div class="card-body p-4">
+                            <h5 class="card-title text-primary mb-3">Search & Filter</h5>
+                            <form>
+                                <div class="row g-3">
+                                    <div class="col-md-3">
+                                        <label for="travelTypeList" class="form-label fw-bold">Travel Type</label>
+                                        <select class="form-select" id="travelTypeList">
+                                            <option selected value="all">All</option>
+                                            <option value="flight">Flight</option>
+                                            <option value="train">Train</option>
+                                            <option value="bus">Bus</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="sourceCityList" class="form-label fw-bold">From</label>
+                                        <select class="form-select" id="sourceCityList">
+                                            <option selected>Select City</option>
+                                            <option>Mumbai</option>
+                                            <option>Delhi</option>
+                                            <option>Bangalore</option>
+                                            <option>Chennai</option>
+                                            <option>Kolkata</option>
+                                            <option>Hyderabad</option>
+                                            <option>Ahmedabad</option>
+                                            <option>Pune</option>
+                                            <option>Jaipur</option>
+                                            <option>Lucknow</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="destinationCityList" class="form-label fw-bold">To</label>
+                                        <select class="form-select" id="destinationCityList">
+                                            <option selected>Select City</option>
+                                            <option>Mumbai</option>
+                                            <option>Delhi</option>
+                                            <option>Bangalore</option>
+                                            <option>Chennai</option>
+                                            <option>Kolkata</option>
+                                            <option>Hyderabad</option>
+                                            <option>Ahmedabad</option>
+                                            <option>Pune</option>
+                                            <option>Jaipur</option>
+                                            <option>Lucknow</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="travelDateList" class="form-label fw-bold">Date</label>
+                                        <input type="date" class="form-control" id="travelDateList">
+                                    </div>
+                                    <div class="col-12">
+                                        <button type="button" class="btn btn-primary">
+                                            <i class="bi bi-search me-1"></i> Search
+                                        </button>
+                                        <button type="reset" class="btn btn-outline-secondary ms-2">
+                                            <i class="bi bi-arrow-clockwise me-1"></i> Clear
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Travel Options -->
+                    <div class="row">
+                        <!-- Flight Option -->
+                        <div class="col-md-4 mb-4">
+                            <div class="card travel-option-card">
+                                <div class="card-header bg-primary text-white py-3 position-relative">
+                                    <h5 class="mb-0">
+                                        <i class="bi bi-airplane travel-icon"></i>Flight
+                                    </h5>
+                                    <span class="travel-type-badge bg-light text-dark">Flight No: AI-202</span>
+                                </div>
+                                <div class="card-body">
+                                    <h6 class="card-title text-center mb-4">
+                                        <span class="city-highlight">Mumbai</span> to <span class="city-highlight">Delhi</span>
+                                    </h6>
+                                    <div class="d-flex justify-content-between mb-2">
+                                        <span class="fw-bold">Departure:</span>
+                                        <span>Aug 29, 2025 08:30</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between mb-2">
+                                        <span class="fw-bold">Arrival:</span>
+                                        <span>Aug 29, 2025 10:45</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between mb-2">
+                                        <span class="fw-bold">Duration:</span>
+                                        <span>2h 15m</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between mb-2">
+                                        <span class="fw-bold">Available Seats:</span>
+                                        <span class="availability-badge bg-success text-white">24 Seats</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-center mt-4">
+                                        <span class="fw-bold">Price:</span>
+                                        <span class="price-tag text-rupee">₹5,499</span>
+                                    </div>
+                                </div>
+                                <div class="card-footer bg-transparent text-center">
+                                    <button class="btn btn-primary" onclick="showPage('booking-form')">
+                                        <i class="bi bi-ticket-perforated me-1"></i> Book Now
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Train Option -->
+                        <div class="col-md-4 mb-4">
+                            <div class="card travel-option-card">
+                                <div class="card-header bg-success text-white py-3 position-relative">
+                                    <h5 class="mb-0">
+                                        <i class="bi bi-train-lightrail-front travel-icon"></i>Train
+                                    </h5>
+                                    <span class="travel-type-badge bg-light text-dark">Train No: 12302</span>
+                                </div>
+                                <div class="card-body">
+                                    <h6 class="card-title text-center mb-4">
+                                        <span class="city-highlight">Bangalore</span> to <span class="city-highlight">Chennai</span>
+                                    </h6>
+                                    <div class="d-flex justify-content-between mb-2">
+                                        <span class="fw-bold">Departure:</span>
+                                        <span>Aug 30, 2025 15:20</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between mb-2">
+                                        <span class="fw-bold">Arrival:</span>
+                                        <span>Aug 30, 2025 22:45</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between mb-2">
+                                        <span class="fw-bold">Duration:</span>
+                                        <span>7h 25m</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between mb-2">
+                                        <span class="fw-bold">Available Seats:</span>
+                                        <span class="availability-badge bg-warning text-dark">12 Seats</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-center mt-4">
+                                        <span class="fw-bold">Price:</span>
+                                        <span class="price-tag text-rupee">₹1,249</span>
+                                    </div>
+                                </div>
+                                <div class="card-footer bg-transparent text-center">
+                                    <button class="btn btn-primary" onclick="showPage('booking-form')">
+                                        <i class="bi bi-ticket-perforated me-1"></i> Book Now
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Bus Option -->
+                        <div class="col-md-4 mb-4">
+                            <div class="card travel-option-card">
+                                <div class="card-header bg-warning text-dark py-3 position-relative">
+                                    <h5 class="mb-0">
+                                        <i class="bi bi-bus-front travel-icon"></i>Bus
+                                    </h5>
+                                    <span class="travel-type-badge bg-light text-dark">Bus Type: AC Sleeper</span>
+                                </div>
+                                <div class="card-body">
+                                    <h6 class="card-title text-center mb-4">
+                                        <span class="city-highlight">Hyderabad</span> to <span class="city-highlight">Pune</span>
+                                    </h6>
+                                    <div class="d-flex justify-content-between mb-2">
+                                        <span class="fw-bold">Departure:</span>
+                                        <span>Aug 31, 2025 20:00</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between mb-2">
+                                        <span class="fw-bold">Arrival:</span>
+                                        <span>Sep 01, 2025 07:30</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between mb-2">
+                                        <span class="fw-bold">Duration:</span>
+                                        <span>11h 30m</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between mb-2">
+                                        <span class="fw-bold">Available Seats:</span>
+                                        <span class="availability-badge bg-success text-white">18 Seats</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-center mt-4">
+                                        <span class="fw-bold">Price:</span>
+                                        <span class="price-tag text-rupee">₹1,899</span>
+                                    </div>
+                                </div>
+                                <div class="card-footer bg-transparent text-center">
+                                    <button class="btn btn-primary" onclick="showPage('booking-form')">
+                                        <i class="bi bi-ticket-perforated me-1"></i> Book Now
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row mt-3">
+                        <!-- Additional options -->
+                        <div class="col-md-4 mb-4">
+                            <div class="card travel-option-card">
+                                <div class="card-header bg-info text-white py-3 position-relative">
+                                    <h5 class="mb-0">
+                                        <i class="bi bi-airplane travel-icon"></i>Flight
+                                    </h5>
+                                    <span class="travel-type-badge bg-light text-dark">Flight No: 6E-531</span>
+                                </div>
+                                <div class="card-body">
+                                    <h6 class="card-title text-center mb-4">
+                                        <span class="city-highlight">Kolkata</span> to <span class="city-highlight">Jaipur</span>
+                                    </h6>
+                                    <div class="d-flex justify-content-between mb-2">
+                                        <span class="fw-bold">Departure:</span>
+                                        <span>Sep 02, 2025 11:15</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between mb-2">
+                                        <span class="fw-bold">Arrival:</span>
+                                        <span>Sep 02, 2025 13:45</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between mb-2">
+                                        <span class="fw-bold">Duration:</span>
+                                        <span>2h 30m</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between mb-2">
+                                        <span class="fw-bold">Available Seats:</span>
+                                        <span class="availability-badge bg-success text-white">9 Seats</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-center mt-4">
+                                        <span class="fw-bold">Price:</span>
+                                        <span class="price-tag text-rupee">₹6,299</span>
+                                    </div>
+                                </div>
+                                <div class="card-footer bg-transparent text-center">
+                                    <button class="btn btn-primary" onclick="showPage('booking-form')">
+                                        <i class="bi bi-ticket-perforated me-1"></i> Book Now
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-4 mb-4">
+                            <div class="card travel-option-card">
+                                <div class="card-header bg-danger text-white py-3 position-relative">
+                                    <h5 class="mb-0">
+                                        <i class="bi bi-train-lightrail-front travel-icon"></i>Train
+                                    </h5>
+                                    <span class="travel-type-badge bg-light text-dark">Train No: 12259</span>
+                                </div>
+                                <div class="card-body">
+                                    <h6 class="card-title text-center mb-4">
+                                        <span class="city-highlight">Ahmedabad</span> to <span class="city-highlight">Lucknow</span>
+                                    </h6>
+                                    <div class="d-flex justify-content-between mb-2">
+                                        <span class="fw-bold">Departure:</span>
+                                        <span>Sep 03, 2025 06:40</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between mb-2">
+                                        <span class="fw-bold">Arrival:</span>
+                                        <span>Sep 03, 2025 20:15</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between mb-2">
+                                        <span class="fw-bold">Duration:</span>
+                                        <span>13h 35m</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between mb-2">
+                                        <span class="fw-bold">Available Seats:</span>
+                                        <span class="availability-badge bg-warning text-dark">5 Seats</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-center mt-4">
+                                        <span class="fw-bold">Price:</span>
+                                        <span class="price-tag text-rupee">₹1,549</span>
+                                    </div>
+                                </div>
+                                <div class="card-footer bg-transparent text-center">
+                                    <button class="btn btn-primary" onclick="showPage('booking-form')">
+                                        <i class="bi bi-ticket-perforated me-1"></i> Book Now
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-4 mb-4">
+                            <div class="card travel-option-card">
+                                <div class="card-header bg-secondary text-white py-3 position-relative">
+                                    <h5 class="mb-0">
+                                        <i class="bi bi-bus-front travel-icon"></i>Bus
+                                    </h5>
+                                    <span class="travel-type-badge bg-light text-dark">Bus Type: Non-AC Seater</span>
+                                </div>
+                                <div class="card-body">
+                                    <h6 class="card-title text-center mb-4">
+                                        <span class="city-highlight">Chennai</span> to <span class="city-highlight">Bangalore</span>
+                                    </h6>
+                                    <div class="d-flex justify-content-between mb-2">
+                                        <span class="fw-bold">Departure:</span>
+                                        <span>Sep 04, 2025 09:30</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between mb-2">
+                                        <span class="fw-bold">Arrival:</span>
+                                        <span>Sep 04, 2025 16:45</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between mb-2">
+                                        <span class="fw-bold">Duration:</span>
+                                        <span>7h 15m</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between mb-2">
+                                        <span class="fw-bold">Available Seats:</span>
+                                        <span class="availability-badge bg-success text-white">22 Seats</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-center mt-4">
+                                        <span class="fw-bold">Price:</span>
+                                        <span class="price-tag text-rupee">₹899</span>
+                                    </div>
+                                </div>
+                                <div class="card-footer bg-transparent text-center">
+                                    <button class="btn btn-primary" onclick="showPage('booking-form')">
+                                        <i class="bi bi-ticket-perforated me-1"></i> Book Now
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- BOOKING FORM PAGE -->
+        <div id="booking-form" class="page-container">
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <div class="card shadow-sm">
+                        <div class="card-header bg-primary text-white py-3">
+                            <h4 class="mb-0">
+                                <i class="bi bi-ticket-perforated me-2"></i>
+                                Book Flight: Mumbai to Delhi
+                            </h4>
+                        </div>
+                        <div class="card-body">
+                            <!-- Travel Summary -->
+                            <div class="card mb-4 border-0 shadow-sm">
+                                <div class="card-body">
+                                    <h5 class="text-primary">
+                                        <i class="bi bi-info-circle me-2"></i>Travel Details
+                                    </h5>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <p><strong>Departure:</strong> Aug 29, 2025 08:30</p>
+                                            <p><strong>Arrival:</strong> Aug 29, 2025 10:45</p>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p><strong>Available Seats:</strong> 24</p>
+                                            <p><strong>Price per Seat:</strong> <span class="text-rupee">₹5,499</span></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Booking Form -->
+                            <form>
+                                <div class="mb-3">
+                                    <label for="numberOfSeats" class="form-label fw-bold">Number of Seats</label>
+                                    <input type="number" class="form-control" id="numberOfSeats" min="1" max="24" value="1">
+                                    <div class="form-text">Maximum 24 seats available</div>
+                                </div>
+
+                                <!-- Price Calculation -->
+                                <div class="card mb-4 border-0 shadow-sm">
+                                    <div class="card-body">
+                                        <h5 class="text-primary">
+                                            <i class="bi bi-calculator me-2"></i>Price Calculation
+                                        </h5>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <p>Price per seat: <span class="text-rupee">₹5,499</span></p>
+                                                <p>Number of seats: <span id="seat-count">1</span></p>
+                                            </div>
+                                            <div class="col-md-6 text-end">
+                                                <h4>Total: <span class="text-rupee" id="total-price">₹5,499</span></h4>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="d-grid gap-2 d-md-flex justify-content-md-between">
+                                    <a href="#" class="btn btn-secondary" onclick="showPage('travel-list')">
+                                        <i class="bi bi-arrow-left me-1"></i> Back to Travel Options
+                                    </a>
+                                    <button type="button" class="btn btn-primary" onclick="showPage('booking-detail')">
+                                        <i class="bi bi-check-circle me-1"></i> Confirm Booking
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- BOOKING DETAIL PAGE -->
+        <div id="booking-detail" class="page-container">
+            <div class="row justify-content-center">
+                <div class="col-md-10">
+                    <div class="card shadow-sm">
+                        <div class="card-header bg-primary text-white py-3">
+                            <h4 class="mb-0">
+                                <i class="bi bi-ticket-detailed me-2"></i>
+                                Booking Details #BOOK123456
+                            </h4>
+                        </div>
+                        <div class="card-body">
+                            <!-- Booking Status Badge -->
+                            <div class="mb-4 d-flex justify-content-between align-items-center">
+                                <span class="badge bg-success p-2 fs-6">
+                                    <i class="bi bi-check-circle me-1"></i>
+                                    Confirmed
+                                </span>
+                                <span class="text-muted">Booked on Aug 28, 2025 19:48</span>
+                            </div>
+
+                            <div class="row">
+                                <!-- Travel Information -->
+                                <div class="col-md-6">
+                                    <div class="card mb-4 border-0 shadow-sm">
+                                        <div class="card-header bg-light">
+                                            <h5 class="mb-0 text-primary">
+                                                <i class="bi bi-geo-alt me-2"></i>Travel Information
+                                            </h5>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="mb-3 d-flex justify-content-between">
+                                                <strong>Travel Type:</strong>
+                                                <span>
+                                                    <i class="bi bi-airplane text-primary me-1"></i>
+                                                    Flight
+                                                </span>
+                                            </div>
+                                            
+                                            <div class="mb-3 d-flex justify-content-between">
+                                                <strong>Route:</strong>
+                                                <span>
+                                                    Mumbai → Delhi
+                                                </span>
+                                            </div>
+                                            
+                                            <div class="mb-3 d-flex justify-content-between">
+                                                <strong>Departure:</strong>
+                                                <span>
+                                                    Aug 29, 2025 08:30
+                                                </span>
+                                            </div>
+                                            
+                                            <div class="mb-3 d-flex justify-content-between">
+                                                <strong>Arrival:</strong>
+                                                <span>
+                                                    Aug 29, 2025 10:45
+                                                </span>
+                                            </div>
+                                            
+                                            <div class="mb-3 d-flex justify-content-between">
+                                                <strong>Duration:</strong>
+                                                <span>
+                                                    2h 15m
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Booking Details -->
+                                <div class="col-md-6">
+                                    <div class="card mb-4 border-0 shadow-sm">
+                                        <div class="card-header bg-light">
+                                            <h5 class="mb-0 text-primary">
+                                                <i class="bi bi-receipt me-2"></i>Booking Details
+                                            </h5>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="mb-3 d-flex justify-content-between">
+                                                <strong>Booking ID:</strong>
+                                                <span>#BOOK123456</span>
+                                            </div>
+                                            
+                                            <div class="mb-3 d-flex justify-content-between">
+                                                <strong>Passenger:</strong>
+                                                <span>Rahul Sharma</span>
+                                            </div>
+                                            
+                                            <div class="mb-3 d-flex justify-content-between">
+                                                <strong>Number of Seats:</strong>
+                                                <span>2</span>
+                                            </div>
+                                            
+                                            <div class="mb-3 d-flex justify-content-between">
+                                                <strong>Price per Seat:</strong>
+                                                <span class="text-rupee">₹5,499</span>
+                                            </div>
+                                            
+                                            <div class="mb-3 d-flex justify-content-between align-items-center">
+                                                <strong>Total Amount:</strong>
+                                                <span class="text-rupee fw-bold fs-5">₹10,998</span>
+                                            </div>
+                                            
+                                            <div class="mb-3 d-flex justify-content-between">
+                                                <strong>Booking Date:</strong>
+                                                <span>Aug 28, 2025 19:48</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Action Buttons -->
+                            <div class="row mt-4">
+                                <div class="col-12">
+                                    <div class="d-grid gap-2 d-md-flex justify-content-md-between">
+                                        <a href="#" class="btn btn-secondary" onclick="showPage('booking-list')">
+                                            <i class="bi bi-arrow-left me-1"></i> Back to Bookings
+                                        </a>
+                                        
+                                        <button class="btn btn-danger">
+                                            <i class="bi bi-x-circle me-1"></i> Cancel Booking
+                                        </button>
+                                        
+                                        <button class="btn btn-outline-primary" onclick="window.print()">
+                                            <i class="bi bi-printer me-1"></i> Print Ticket
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Additional Information -->
+                            <div class="row mt-4">
+                                <div class="col-12">
+                                    <div class="alert alert-info">
+                                        <h6><i class="bi bi-info-circle me-2"></i> Important Information</h6>
+                                        <ul class="mb-0">
+                                            <li>Please arrive at least 2 hours before departure for international flights</li>
+                                            <li>Carry a valid ID proof for verification</li>
+                                            <li>Check-in closes 45 minutes before departure</li>
+                                            <li>Baggage allowance: 20kg check-in + 7kg cabin</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- BOOKING LIST PAGE -->
+        <div id="booking-list" class="page-container">
+            <div class="row">
+                <div class="col-12">
+                    <h2 class="mb-4 text-dark">
+                        <i class="bi bi-ticket-detailed me-2"></i>
+                        My Bookings
+                    </h2>
+                    
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>Booking ID</th>
+                                    <th>Travel Type</th>
+                                    <th>Route</th>
+                                    <th>Departure</th>
+                                    <th>Seats</th>
+                                    <th>Total Price</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <a href="#" class="text-decoration-none fw-bold" onclick="showPage('booking-detail')">
+                                            #BOOK123456
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <i class="bi bi-airplane text-primary me-1"></i>
+                                        Flight
+                                    </td>
+                                    <td>Mumbai → Delhi</td>
+                                    <td>Aug 29, 2025</td>
+                                    <td>2</td>
+                                    <td class="text-rupee fw-bold">₹10,998</td>
+                                    <td>
+                                        <span class="badge bg-success p-2">
+                                            Confirmed
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <div class="btn-group btn-group-sm">
+                                            <a href="#" class="btn btn-outline-primary" onclick="showPage('booking-detail')">
+                                                <i class="bi bi-eye"></i> View
+                                            </a>
+                                            <button class="btn btn-outline-danger">
+                                                <i class="bi bi-x-circle"></i> Cancel
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <a href="#" class="text-decoration-none fw-bold" onclick="showPage('booking-detail')">
+                                            #BOOK123457
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <i class="bi bi-train-lightrail-front text-success me-1"></i>
+                                        Train
+                                    </td>
+                                    <td>Bangalore → Chennai</td>
+                                    <td>Sep 05, 2025</td>
+                                    <td>3</td>
+                                    <td class="text-rupee fw-bold">₹3,747</td>
+                                    <td>
+                                        <span class="badge bg-success p-2">
+                                            Confirmed
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <div class="btn-group btn-group-sm">
+                                            <a href="#" class="btn btn-outline-primary" onclick="showPage('booking-detail')">
+                                                <i class="bi bi-eye"></i> View
+                                            </a>
+                                            <button class="btn btn-outline-danger">
+                                                <i class="bi bi-x-circle"></i> Cancel
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <a href="#" class="text-decoration-none fw-bold" onclick="showPage('booking-detail')">
+                                            #BOOK123458
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <i class="bi bi-bus-front text-warning me-1"></i>
+                                        Bus
+                                    </td>
+                                    <td>Hyderabad → Pune</td>
+                                    <td>Sep 10, 2025</td>
+                                    <td>1</td>
+                                    <td class="text-rupee fw-bold">₹1,899</td>
+                                    <td>
+                                        <span class="badge bg-secondary p-2">
+                                            Cancelled
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <div class="btn-group btn-group-sm">
+                                            <a href="#" class="btn btn-outline-primary" onclick="showPage('booking-detail')">
+                                                <i class="bi bi-eye"></i> View
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- AI ASSISTANT PAGE -->
+        <div id="ai-assistant" class="page-container">
+            <div class="row justify-content-center">
+                <div class="col-md-10">
+                    <div class="card">
+                        <div class="card-header bg-info text-white py-3">
+                            <h4 class="mb-0">
+                                <i class="bi bi-robot me-2"></i>
+                                Travel AI Assistant
+                            </h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="alert alert-info d-flex align-items-center">
+                                <i class="bi bi-info-circle me-2 fs-4"></i>
+                                <div>I can help you with bookings, travel information, and answer your questions!</div>
+                            </div>
+
+                            <!-- Chat Interface -->
+                            <div class="chat-container">
+                                <div class="chat-message ai-message">
+                                    <div class="message-content bg-white p-3 rounded shadow-sm">
+                                        <strong>AI Assistant:</strong> Hello! I'm your travel assistant. How can I help you today? I can assist with bookings, travel information, cancellations, and more!
+                                    </div>
+                                    <small class="text-muted">Just now</small>
+                                </div>
+                            </div>
+
+                            <!-- Chat Input -->
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="Ask me anything about travel booking..." aria-label="Message to AI assistant">
+                                <button class="btn btn-primary" type="button">
+                                    <i class="bi bi-send me-1"></i> Send
+                                </button>
+                            </div>
+
+                            <!-- Quick Questions -->
+                            <div class="mt-4">
+                                <h6 class="text-primary mb-3">Quick Questions:</h6>
+                                <div class="d-flex flex-wrap gap-2">
+                                    <button class="btn btn-outline-primary">
+                                        How to book flights?
+                                    </button>
+                                    <button class="btn btn-outline-primary">
+                                        Cancellation policy?
+                                    </button>
+                                    <button class="btn btn-outline-primary">
+                                        Check availability
+                                    </button>
+                                    <button class="btn btn-outline-primary">
+                                        Cheapest options
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PROFILE PAGE -->
+        <div id="profile" class="page-container">
+            <div class="row justify-content-center">
+                <div class="col-md-10">
+                    <div class="card shadow-sm">
+                        <div class="card-header bg-primary text-white py-3">
+                            <h4 class="mb-0">
+                                <i class="bi bi-person-circle me-2"></i>
+                                User Profile
+                            </h4>
+                        </div>
+                        <div class="card-body">
+                            <!-- User Stats -->
+                            <div class="row mb-4 profile-stats">
+                                <div class="col-md-4 mb-3">
+                                    <div class="card text-center bg-light border-0 shadow-sm h-100">
+                                        <div class="card-body py-4">
+                                            <h5 class="card-title display-6 text-primary">3</h5>
+                                            <p class="card-text fw-bold">Total Bookings</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <div class="card text-center bg-success text-white border-0 shadow-sm h-100">
+                                        <div class="card-body py-4">
+                                            <h5 class="card-title display-6">2</h5>
+                                            <p class="card-text fw-bold">Confirmed</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <div class="card text-center bg-danger text-white border-0 shadow-sm h-100">
+                                        <div class="card-body py-4">
+                                            <h5 class="card-title display-6">1</h5>
+                                            <p class="card-text fw-bold">Cancelled</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Profile Form -->
+                            <form>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="username" class="form-label fw-bold">Username</label>
+                                        <input type="text" class="form-control" id="username" value="rahul_sharma">
+                                    </div>
+                                    
+                                    <div class="col-md-6 mb-3">
+                                        <label for="email" class="form-label fw-bold">Email</label>
+                                        <input type="email" class="form-control" id="email" value="rahul.sharma@example.com">
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label fw-bold">Account Status</label>
+                                    <div class="form-control">
+                                        <span class="badge bg-success p-2">
+                                            <i class="bi bi-check-circle me-1"></i>Active
+                                        </span>
+                                        <span class="ms-2">Member since: Jan 15, 2023</span>
+                                    </div>
+                                </div>
+
+                                <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+                                    <a href="#" class="btn btn-outline-primary me-md-2" onclick="showPage('booking-list')">
+                                        <i class="bi bi-ticket me-1"></i> View My Bookings
+                                    </a>
+                                    <button type="button" class="btn btn-primary">
+                                        <i class="bi bi-check-circle me-1"></i> Update Profile
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Quick Actions -->
+                    <div class="card mt-4 shadow-sm">
+                        <div class="card-header bg-light">
+                            <h5 class="mb-0 text-primary">
+                                <i class="bi bi-lightning me-2"></i>Quick Actions
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="d-grid gap-2 d-md-flex">
+                                <a href="#" class="btn btn-outline-primary me-md-2" onclick="showPage('travel-list')">
+                                    <i class="bi bi-search me-1"></i> Browse Travel Options
+                                </a>
+                                <a href="#" class="btn btn-outline-info me-md-2" onclick="showPage('ai-assistant')">
+                                    <i class="bi bi-robot me-1"></i> AI Travel Assistant
+                                </a>
+                                <a href="#" class="btn btn-outline-secondary" onclick="showPage('home')">
+                                    <i class="bi bi-house me-1"></i> Back to Home
+                                </a>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- LOGIN PAGE -->
+        <div id="login" class="page-container">
+            <div class="row justify-content-center">
+                <div class="col-md-6 col-lg-5">
+                    <div class="card shadow-sm">
+                        <div class="card-header bg-primary text-white text-center py-3">
+                            <h3 class="mb-0">
+                                <i class="bi bi-box-arrow-in-right me-2"></i>Login
+                            </h3>
+                        </div>
+                        <div class="card-body p-4">
+                            <form>
+                                <div class="mb-3">
+                                    <label for="loginEmail" class="form-label fw-bold">Email</label>
+                                    <input type="email" class="form-control" id="loginEmail" placeholder="Enter your email">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="loginPassword" class="form-label fw-bold">Password</label>
+                                    <input type="password" class="form-control" id="loginPassword" placeholder="Enter your password">
+                                </div>
+                                
+                                <button type="button" class="btn btn-primary w-100 py-2" onclick="showPage('profile')">
+                                    <i class="bi bi-box-arrow-in-right me-2"></i>Login
+                                </button>
+                            </form>
+                            <div class="mt-3 text-center">
+                                <p>Don't have an account? <a href="#" class="text-primary" onclick="showPage('register')">Register here</a></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- REGISTER PAGE -->
+        <div id="register" class="page-container">
+            <div class="row justify-content-center">
+                <div class="col-md-6 col-lg-5">
+                    <div class="card shadow-sm">
+                        <div class="card-header bg-success text-white text-center py-3">
+                            <h3 class="mb-0">
+                                <i class="bi bi-person-plus me-2"></i>Register
+                            </h3>
+                        </div>
+                        <div class="card-body p-4">
+                            <form>
+                                <div class="mb-3">
+                                    <label for="registerName" class="form-label fw-bold">Full Name</label>
+                                    <input type="text" class="form-control" id="registerName" placeholder="Enter your full name">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="registerEmail" class="form-label fw-bold">Email</label>
+                                    <input type="email" class="form-control" id="registerEmail" placeholder="Enter your email">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="registerPassword" class="form-label fw-bold">Password</label>
+                                    <input type="password" class="form-control" id="registerPassword" placeholder="Create a password">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="registerConfirmPassword" class="form-label fw-bold">Confirm Password</label>
+                                    <input type="password" class="form-control" id="registerConfirmPassword" placeholder="Confirm your password">
+                                </div>
+                                
+                                <button type="button" class="btn btn-success w-100 py-2" onclick="showPage('profile')">
+                                    <i class="bi bi-person-plus me-2"></i>Register
+                                </button>
+                            </form>
+                            <div class="mt-3 text-center">
+                                <p>Already have an account? <a href="#" class="text-success" onclick="showPage('login')">Login here</a></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="text-center py-4 mt-5">
+        <div class="container">
+            <p>&copy; 2023 TravelBooking App. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Function to show specific page and hide others
+        function showPage(pageId) {
+            // Hide all pages
+            document.querySelectorAll('.page-container').forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            // Show the requested page
+            document.getElementById(pageId).classList.add('active');
+            
+            // Update active navigation
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // Set the appropriate nav item as active
+            const navId = 'nav-' + pageId.replace('-', '');
+            const navItem = document.getElementById(navId);
+            if (navItem) {
+                navItem.classList.add('active');
+            } else {
+                // For pages like booking-form that don't have direct nav items
+                document.getElementById('nav-travel').classList.add('active');
+            }
+            
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+        
+        // Set default date to tomorrow
+        document.addEventListener('DOMContentLoaded', function() {
+            const tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            const formattedDate = tomorrow.toISOString().split('T')[0];
+            document.getElementById('travelDate').value = formattedDate;
+            document.getElementById('travelDateList').value = formattedDate;
+            
+            // Initialize price calculation
+            const seatInput = document.getElementById('numberOfSeats');
+            const seatCount = document.getElementById('seat-count');
+            const totalPrice = document.getElementById('total-price');
+            const pricePerSeat = 5499;
+            
+            seatInput.addEventListener('input', function() {
+                const seats = parseInt(this.value) || 0;
+                seatCount.textContent = seats;
+                totalPrice.textContent = '₹' + (seats * pricePerSeat).toFixed(2);
+            });
+            
+            // Add animation to cards on page load
+            const cards = document.querySelectorAll('.card');
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                setTimeout(() => {
+                    card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, 100 * index);
+            });
+        });
+    </script>
+</body>
+</html>
